@@ -7,7 +7,7 @@ A progressive web app that guides you through the
 
 ## Features
 
-- Step-by-step session player for all 7 exercises, with setup, movement and tips
+- Step-by-step session player for all 7 exercises, with photos, setup, movement and tips
 - Hold / relax / rest timers with beeps, voice prompts and vibration
 - Keeps the screen awake during a session
 - Tracks the 2× daily, 5× weekly schedule
@@ -35,5 +35,6 @@ When changing cached files, bump `CACHE` in `sw.js` (and `APP_VERSION` in `app.j
 ## Disclaimer
 
 This app is a guide, not medical advice. Follow your physical therapist's instructions. Exercise content is
-adapted from OrthoIndy's published home exercise program; video demonstrations are at
+adapted from OrthoIndy's published home exercise program. Exercise photos are © OrthoIndy and are not stored in
+this repo: the app downloads OrthoIndy's PDF and crops the photos on your device ([photos.js](photos.js)); video demonstrations are at
 [OrthoIndy.com/PTVideos](https://www.orthoindy.com/PTVideos).

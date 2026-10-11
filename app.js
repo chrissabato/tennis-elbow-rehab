@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = '1.0.0';
+const APP_VERSION = '1.1.0';
 const RING_LEN = 2 * Math.PI * 52;
 const $ = (id) => document.getElementById(id);
 
@@ -128,6 +128,15 @@ function renderToday() {
   $('est-min').textContent = Math.round(EXERCISES.reduce((s, ex) => s + exerciseSeconds(ex), 0) / 60);
 }
 
+function photoPairHtml(ex) {
+  const a = getPhoto(ex.id, 1), b = getPhoto(ex.id, 2);
+  if (!a || !b) return '';
+  return `<div class="photos">
+    <figure><img src="${a}" alt="${ex.name}: step 1"><figcaption>Step 1</figcaption></figure>
+    <figure><img src="${b}" alt="${ex.name}: step 2"><figcaption>Step 2</figcaption></figure>
+  </div>`;
+}
+
 function renderLibrary() {
   $('exercise-library').innerHTML = EXERCISES.map((ex, i) => `
     <details class="card ex">
@@ -135,6 +144,7 @@ function renderLibrary() {
         <div><div class="ex-title">${i + 1}. ${ex.name}</div><div class="ex-dose">${doseText(ex)}</div></div>
       </summary>
       <div class="ex-body">
+        ${photoPairHtml(ex)}
         <div class="dose">
           <span>Reps <b>${ex.reps}</b></span><span>Sets <b>${ex.sets}</b></span>
           <span>Hold <b>${ex.hold}s</b></span><span><b>2×</b> daily</span><span><b>5×</b> weekly</span>
@@ -381,6 +391,7 @@ function showIntro() {
   $('p-type').textContent = ex.type === 'stretch' ? 'Stretch' : 'Strengthen';
   $('p-name').textContent = ex.name;
   $('p-dose').innerHTML = `<span>Sets <b>${ex.sets}</b></span><span>Reps <b>${ex.reps}</b></span><span>Hold <b>${ex.hold}s</b></span><span>≈ <b>${fmtDuration(exerciseSeconds(ex))}</b></span>`;
+  $('p-photos').innerHTML = photoPairHtml(ex);
   $('p-equip').textContent = ex.equipment;
   $('p-setup').textContent = ex.setup;
   $('p-move').textContent = ex.movement;
@@ -425,6 +436,9 @@ function enterPhase(startTs) {
     : ph.kind === 'relax' ? 'Slowly return to start'
     : ph.kind === 'rest' ? `Next: set ${ph.set + 1} of ${ex.sets}`
     : ex.equipment === 'None' ? 'Get into position' : `Grab: ${ex.equipment.toLowerCase()}`;
+  const photo = getPhoto(ex.id, ph.kind === 'hold' ? 2 : 1);
+  $('p-photo').hidden = !photo;
+  if (photo) { $('p-photo').src = photo; $('p-photo').alt = `${ex.name}: ${ph.kind === 'hold' ? 'step 2' : 'step 1'}`; }
   $('p-set').textContent = `${ph.set}/${ex.sets}`;
   $('p-rep').textContent = `${ph.rep}/${ex.reps}`;
   $('p-main').textContent = 'Pause';
@@ -622,6 +636,22 @@ function checkReminders() {
   });
 }
 
+/* ---------- photos ---------- */
+
+async function initPhotos(force = false) {
+  $('photo-status').textContent = 'Loading photos from OrthoIndy…';
+  $('photo-reload').disabled = true;
+  if (force) await clearPhotos();
+  const ok = await loadPhotos({ force });
+  $('photo-status').textContent = ok
+    ? 'Photos saved on this device for offline use. © OrthoIndy.'
+    : navigator.onLine ? 'Couldn\'t load photos from OrthoIndy. Try again later.' : 'Go online once to download the photos.';
+  $('photo-reload').disabled = false;
+  $('photo-reload').textContent = ok ? 'Download again' : 'Try again';
+  renderLibrary();
+  if (S.active && S.mode === 'intro') $('p-photos').innerHTML = photoPairHtml(EXERCISES[S.ei]);
+}
+
 /* ---------- init ---------- */
 
 document.querySelectorAll('.tabbar button').forEach((b) => { b.onclick = () => showView(b.dataset.view); });
@@ -629,6 +659,9 @@ renderLibrary();
 bindSettings();
 bindPlayer();
 showView('today');
+$('photo-reload').onclick = () => initPhotos(true);
+initPhotos();
+window.addEventListener('online', () => { if (!getPhoto(EXERCISES[0].id, 1)) initPhotos(true); });
 setInterval(checkReminders, 30000);
 checkReminders();
 

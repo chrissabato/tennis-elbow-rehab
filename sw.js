@@ -1,10 +1,11 @@
-const CACHE = 'elbow-rehab-v1.0.0';
+const CACHE = 'elbow-rehab-v1.1.0';
 const ASSETS = [
   './',
   'index.html',
   'styles.css',
   'app.js',
   'exercises.js',
+  'photos.js',
   'manifest.webmanifest',
   'icons/icon.svg',
   'icons/icon-192.png',

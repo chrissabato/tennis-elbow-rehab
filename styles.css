@@ -193,7 +193,7 @@ details.ex .ex-body { padding: 0 16px 16px; }
   max-width: 640px; width: 100%; margin: 0 auto;
 }
 
-.big-ring { position: relative; width: min(72vw, 300px); aspect-ratio: 1; margin: 12px auto; }
+.big-ring { position: relative; width: min(72vw, 300px, 40vh); aspect-ratio: 1; margin: 12px auto; }
 .big-ring .ring-fg { stroke-width: 8; transition: stroke-dashoffset .2s linear, stroke .3s; }
 .big-ring .ring-bg { stroke-width: 8; }
 .big-ring-label strong { font-size: clamp(3.5rem, 18vw, 5.5rem); font-variant-numeric: tabular-nums; line-height: 1; }
@@ -222,3 +222,10 @@ details.ex .ex-body { padding: 0 16px 16px; }
   background: var(--text); color: var(--bg); padding: 10px 16px; border-radius: 12px; z-index: 30; font-size: .9rem;
   max-width: calc(100% - 32px);
 }
+
+/* Photos */
+.photos { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 0 6px; }
+.photos figure { margin: 0; }
+.photos img { width: 100%; height: auto; background: #fff; border-radius: 12px; border: 1px solid var(--line); display: block; }
+.photos figcaption { font-size: .75rem; color: var(--muted); text-align: center; margin-top: 3px; }
+.phase-photo { display: block; height: min(22vh, 180px); max-width: 100%; margin: 0 auto 4px; object-fit: contain; background: #fff; border-radius: 12px; border: 1px solid var(--line); }
