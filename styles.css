@@ -229,3 +229,7 @@ details.ex .ex-body { padding: 0 16px 16px; }
 .photos img { width: 100%; height: auto; background: #fff; border-radius: 12px; border: 1px solid var(--line); display: block; }
 .photos figcaption { font-size: .75rem; color: var(--muted); text-align: center; margin-top: 3px; }
 .phase-photo { display: block; height: min(22vh, 180px); max-width: 100%; margin: 0 auto 4px; object-fit: contain; background: #fff; border-radius: 12px; border: 1px solid var(--line); }
+
+.install { display: flex; align-items: center; gap: 12px; }
+.install h2 { margin-bottom: 2px; }
+.install .btn { flex: none; }

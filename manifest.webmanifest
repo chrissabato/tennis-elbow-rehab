@@ -2,6 +2,7 @@
   "name": "Tennis Elbow Rehab",
   "short_name": "Elbow Rehab",
   "description": "Guided tennis elbow home exercise program with timers and progress tracking.",
+  "id": "./",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

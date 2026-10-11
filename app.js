@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = '1.2.0';
+const APP_VERSION = '1.2.1';
 const RING_LEN = 2 * Math.PI * 52;
 const $ = (id) => document.getElementById(id);
 const getPhoto = (id, step) => `photos/${id}-${step}.jpg`;
@@ -635,6 +635,27 @@ function checkReminders() {
     }
   });
 }
+
+/* ---------- install prompt ---------- */
+
+let installEvent = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  installEvent = e;
+  $('install-card').hidden = false;
+});
+window.addEventListener('appinstalled', () => {
+  installEvent = null;
+  $('install-card').hidden = true;
+  toast('App installed');
+});
+$('install-btn').onclick = async () => {
+  if (!installEvent) return;
+  installEvent.prompt();
+  await installEvent.userChoice;
+  installEvent = null;
+  $('install-card').hidden = true;
+};
 
 /* ---------- init ---------- */
 
