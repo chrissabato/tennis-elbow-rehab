@@ -56,7 +56,7 @@
       <div id="exercise-library"></div>
       <div class="card">
         <p class="small">Program from the <a id="src-link" target="_blank" rel="noopener">OrthoIndy Tennis Elbow Home Exercise Program</a>. Video demonstrations are at <a id="video-link" target="_blank" rel="noopener">OrthoIndy.com/PTVideos</a>.</p>
-        <p class="small muted">Exercise photos © OrthoIndy. They are loaded from OrthoIndy's PDF on your device and aren't included in this app.</p>
+        <p class="small muted">Exercise photos © OrthoIndy, from the program PDF.</p>
       </div>
     </section>
 
@@ -99,11 +99,6 @@
         <label class="row">Morning session <input type="time" id="set-rem1"></label>
         <label class="row">Evening session <input type="time" id="set-rem2"></label>
         <label class="row">Enable reminders <input type="checkbox" id="set-remind" class="switch"></label>
-      </div>
-      <div class="card">
-        <h2>Exercise photos</h2>
-        <p class="muted small" id="photo-status">Checking…</p>
-        <button class="btn" id="photo-reload">Download again</button>
       </div>
       <div class="card">
         <h2>Data</h2>
@@ -151,7 +146,7 @@
       <!-- timer -->
       <div id="p-timer" hidden>
         <h2 id="p-tname" class="center"></h2>
-        <img id="p-photo" class="phase-photo" alt="" hidden>
+        <img id="p-photo" class="phase-photo" alt="">
         <div class="big-ring">
           <svg viewBox="0 0 120 120" aria-hidden="true">
             <circle cx="60" cy="60" r="52" class="ring-bg"/>
@@ -193,7 +188,6 @@
   <div id="toast" class="toast" hidden></div>
 
   <script src="exercises.js"></script>
-  <script src="photos.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

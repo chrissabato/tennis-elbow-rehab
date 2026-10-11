@@ -1,8 +1,9 @@
 'use strict';
 
-const APP_VERSION = '1.1.0';
+const APP_VERSION = '1.2.0';
 const RING_LEN = 2 * Math.PI * 52;
 const $ = (id) => document.getElementById(id);
+const getPhoto = (id, step) => `photos/${id}-${step}.jpg`;
 
 /* ---------- storage ---------- */
 
@@ -130,7 +131,6 @@ function renderToday() {
 
 function photoPairHtml(ex) {
   const a = getPhoto(ex.id, 1), b = getPhoto(ex.id, 2);
-  if (!a || !b) return '';
   return `<div class="photos">
     <figure><img src="${a}" alt="${ex.name}: step 1"><figcaption>Step 1</figcaption></figure>
     <figure><img src="${b}" alt="${ex.name}: step 2"><figcaption>Step 2</figcaption></figure>
@@ -437,8 +437,8 @@ function enterPhase(startTs) {
     : ph.kind === 'rest' ? `Next: set ${ph.set + 1} of ${ex.sets}`
     : ex.equipment === 'None' ? 'Get into position' : `Grab: ${ex.equipment.toLowerCase()}`;
   const photo = getPhoto(ex.id, ph.kind === 'hold' ? 2 : 1);
-  $('p-photo').hidden = !photo;
-  if (photo) { $('p-photo').src = photo; $('p-photo').alt = `${ex.name}: ${ph.kind === 'hold' ? 'step 2' : 'step 1'}`; }
+  $('p-photo').src = photo;
+  $('p-photo').alt = `${ex.name}: ${ph.kind === 'hold' ? 'step 2' : 'step 1'}`;
   $('p-set').textContent = `${ph.set}/${ex.sets}`;
   $('p-rep').textContent = `${ph.rep}/${ex.reps}`;
   $('p-main').textContent = 'Pause';
@@ -636,22 +636,6 @@ function checkReminders() {
   });
 }
 
-/* ---------- photos ---------- */
-
-async function initPhotos(force = false) {
-  $('photo-status').textContent = 'Loading photos from OrthoIndy…';
-  $('photo-reload').disabled = true;
-  if (force) await clearPhotos();
-  const ok = await loadPhotos({ force });
-  $('photo-status').textContent = ok
-    ? 'Photos saved on this device for offline use. © OrthoIndy.'
-    : navigator.onLine ? 'Couldn\'t load photos from OrthoIndy. Try again later.' : 'Go online once to download the photos.';
-  $('photo-reload').disabled = false;
-  $('photo-reload').textContent = ok ? 'Download again' : 'Try again';
-  renderLibrary();
-  if (S.active && S.mode === 'intro') $('p-photos').innerHTML = photoPairHtml(EXERCISES[S.ei]);
-}
-
 /* ---------- init ---------- */
 
 document.querySelectorAll('.tabbar button').forEach((b) => { b.onclick = () => showView(b.dataset.view); });
@@ -659,9 +643,6 @@ renderLibrary();
 bindSettings();
 bindPlayer();
 showView('today');
-$('photo-reload').onclick = () => initPhotos(true);
-initPhotos();
-window.addEventListener('online', () => { if (!getPhoto(EXERCISES[0].id, 1)) initPhotos(true); });
 setInterval(checkReminders, 30000);
 checkReminders();
 
